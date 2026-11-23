@@ -1,0 +1,42 @@
+@page "/razor"
+@rendermode InteractiveServer
+@inject IHttpClientFactory Clients
+@inject NavigationManager Navigation
+<PageTitle>Список задач на Razor</PageTitle>
+<main>
+    <a href="/">← Планировщик с AJAX</a>
+    <h1>Тот же список на Razor</h1>
+    <p>Компонент получает данные через HTTP GET /api/tasks.</p>
+    <button @onclick="LoadAsync" disabled="@loading">Обновить список</button>
+    @if (loading) { <p role="status">Загрузка…</p> }
+    @if (error is not null) { <p role="alert">@error</p> }
+    <section class="tasks">
+    @foreach (var task in tasks)
+    {
+        <article class="task">
+            <div><h2>@task.Title</h2><p>@task.Subject · @(task.DueDate?.ToString("dd.MM.yyyy") ?? "Без срока")</p></div>
+            <span>@(task.IsCompleted ? "Готово" : "В работе")</span>
+        </article>
+    }
+    </section>
+</main>
+@code {
+    private StudyTask[] tasks = [];
+    private string? error;
+    private bool loading;
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender) { await LoadAsync(); StateHasChanged(); }
+    }
+    private async Task LoadAsync()
+    {
+        loading = true; error = null;
+        try {
+            var client = Clients.CreateClient();
+            tasks = await client.GetFromJsonAsync<StudyTask[]>(new Uri(new Uri(Navigation.BaseUri), "api/tasks")) ?? [];
+        }
+        catch (HttpRequestException) { error = "Не удалось получить список из API. Проверьте адрес и работу сервера."; }
+        catch (TaskCanceledException) { error = "Сервер не ответил вовремя. Попробуйте ещё раз."; }
+        finally { loading = false; }
+    }
+}

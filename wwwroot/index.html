@@ -1,0 +1,9 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Учебный планировщик</title><link rel="stylesheet" href="/app.css"><script src="/app.js" defer></script></head>
+<body><main>
+<header><div><p class="eyebrow">УЧЕБНЫЙ ПРОЕКТ · ASP.NET CORE</p><h1>Всё по плану.</h1><p class="intro">Задачи, сроки и подготовка к экзаменам.</p></div><a class="secondary" href="/razor">Версия на Razor →</a></header>
+<section class="stats" aria-label="Статистика"><div><b id="total">—</b><span>Всего задач</span></div><div><b id="remaining">—</b><span>В работе</span></div><div><b id="completed">—</b><span>Выполнено</span></div></section>
+<section class="panel"><h2 id="form-title">Новая задача</h2><form id="task-form"><label>Что нужно сделать<input id="title" maxlength="120" required placeholder="Например, разобрать HTTP-методы"></label><div class="form-row"><label>Предмет<input id="subject" maxlength="80" required placeholder="ASP.NET"></label><label>Срок<input id="due" type="date"></label></div><div class="actions"><button id="save" type="submit">Добавить задачу</button><button type="button" id="cancel" class="secondary" hidden>Отменить редактирование</button></div></form></section>
+<section aria-labelledby="list-title"><div class="list-header"><h2 id="list-title">Мои задачи</h2><label>Показать<select id="filter"><option value="all">Все задачи</option><option value="active">В работе</option><option value="completed">Выполненные</option></select></label></div><p id="message" role="status" aria-live="polite"></p><div id="tasks" class="tasks"></div></section>
+<footer>Данные сохраняются в локальном JSON-файле сервера. Обновление списка выполняется без перезагрузки страницы.</footer>
+</main></body></html>
